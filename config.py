@@ -17,4 +17,5 @@ GRID_MAX_LOAD = 3300
 # Inverter
 INVERTER_MAX_LOAD = 8300
 
+# House max load without inverter
 HOUSE_MAX_LOAD = BATTERY_MAX_LOAD_W + GRID_MAX_LOAD

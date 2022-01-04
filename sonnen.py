@@ -5,14 +5,13 @@ import urwid
 # Configuration
 from config import AUTH_TOKEN
 from config import IP
-from config import GRID_MAX_LOAD
 from config import BATTERY_MAX_LOAD_W
 from config import INVERTER_MAX_LOAD
 from config import HOUSE_MAX_LOAD
 
 
 class Sonnen:
-
+    """Class for managing Sonnen API data"""
     # API Groups
     IC_STATUS = 'ic_status'
 
@@ -69,6 +68,10 @@ class Sonnen:
 
     @property
     def time_to_empty(self) -> str:
+        """Time until battery discharged
+            Returns:
+                Time in string format HH MM
+        """
         hours = int(self.remaining_capacity_wh / self.discharging)if self.discharging else 0
         rest_w = self.remaining_capacity_wh % self.discharging if self.discharging else 0
         minutes = int(rest_w / self.discharging * 60) if rest_w > 0 else 0
@@ -76,18 +79,34 @@ class Sonnen:
 
     @property
     def seconds_since_full(self) -> int:
+        """Seconds passed since full charge
+            Returns:
+                seconds as integer
+        """
         return self._latest_details_data[self.IC_STATUS][self.SECONDS_SINCE_FULL_KEY]
 
     @property
     def installed_modules(self) -> int:
+        """Battery modules installed in the system
+            Returns:
+                Number of modules
+        """
         return self._latest_details_data[self.IC_STATUS][self.MODULES_INSTALLED_KEY]
 
     @property
     def minutes_since_full(self) -> int:
+        """Minutes passed since full charge
+            Returns:
+                minutes as integer
+        """
         return int(self.seconds_since_full / 60)
 
     @property
     def hours_since_full(self) -> int:
+        """Hours passed since full charge
+            Returns:
+                hours as integer
+        """
         return int(self.minutes_since_full / 60)
 
     @property
@@ -106,24 +125,43 @@ class Sonnen:
         return f'{days} days - {hours_str}:{minutes_str}:{seconds_str}'
 
     @property
-    def latest_details_data(self) -> list:
+    def latest_details_data(self) -> dict:
+        """Latest details data dict saved from the battery api
+            Returns:
+                last dictionary data saved
+        """
         return self._latest_details_data
 
     @property
-    def status_data(self):
+    def status_data(self) -> dict:
+        """Latest status data dict saved from the battery api
+            Returns:
+                last dictionary data saved
+        """
         return self._status_data
 
     @property
     def consumption(self) -> str:
-        """ Returns consumption of the household """
+        """Consumption of the household
+            Returns:
+                house consumption in Watt
+        """
         return self._latest_details_data[self.CONSUMPTION_KEY]
 
     @property
-    def production(self):
+    def production(self) -> str:
+        """Power production of the household
+            Returns:
+                house production in Watt
+        """
         return self._latest_details_data[self.PRODUCTION_KEY]
 
     @property
-    def u_soc(self):
+    def u_soc(self) -> str:
+        """User state of charge
+            Returns:
+                User SoC in percent
+        """
         return self._latest_details_data[self.USOC_KEY]
 
     @property
@@ -139,11 +177,19 @@ class Sonnen:
         return self._status_data[self.REM_CON_WH_KEY] / 2 - 2300
 
     @property
-    def full_charge_capacity(self):
+    def full_charge_capacity(self) -> int:
+        """Full charge capacity of the battery system
+            Returns:
+                Capacity in Wh
+        """
         return self._latest_details_data[self.FULL_CHARGE_CAPACITY_KEY]
 
     @property
-    def time_remaining_to_fully_charged(self):
+    def time_remaining_to_fully_charged(self) -> str:
+        """Time remaining until fully charged
+            Returns:
+                Time in HH MM format
+        """
         remaining_charge = self.full_charge_capacity - self.remaining_capacity_wh
         hours = int(remaining_charge / self.charging) if self.charging else 0
         minutes = int((remaining_charge % self.charging) / self.charging * 60) if self.charging else 0
@@ -160,25 +206,41 @@ class Sonnen:
         return self._latest_details_data[self.PAC_KEY]
 
     @property
-    def charging(self):
+    def charging(self) -> int:
+        """Actual battery charging value
+            Returns:
+                Charging value in watt
+        """
         if self.pac_total < -1:
             return abs(self.pac_total)
         return 0
 
     @property
-    def discharging(self):
+    def discharging(self) -> int:
+        """Actual battery discharging value
+            Returns:
+                Discharging value in watt
+        """
         if self.pac_total > 0:
             return abs(self.pac_total)
         return 0
 
     @property
-    def grid_in(self):
+    def grid_in(self) -> int:
+        """Actual grid feed in value
+            Returns:
+                Value in watt
+        """
         if self._status_data[self.GRID_FEED_IN_WATT_KEY] > 0:
             return self._status_data[self.GRID_FEED_IN_WATT_KEY]
         return 0
 
     @property
-    def grid_out(self):
+    def grid_out(self) -> int:
+        """Actual grid out value
+            Returns:
+                Value in watt
+        """
         if self._status_data[self.GRID_FEED_IN_WATT_KEY] < 0:
             return abs(self._status_data[self.GRID_FEED_IN_WATT_KEY])
         return 0
@@ -317,7 +379,9 @@ class BatteryPile(urwid.Pile):
 
         # Battery discharging
         self.txt_battery_discharge = urwid.Text('Battery discharge')
-        self.pb_battery_discharge = WattLoadProgressBar(Colors.NORMAL, Colors.COMPLETE, current=0, done=BATTERY_MAX_LOAD_W)
+        self.pb_battery_discharge = WattLoadProgressBar(Colors.NORMAL,
+                                                        Colors.COMPLETE, current=0,
+                                                        done=BATTERY_MAX_LOAD_W)
         self.pb_battery_discharge.current = sonnen.discharging
 
         # Battery charging
@@ -440,6 +504,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
