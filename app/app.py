@@ -1,9 +1,9 @@
 import urwid
 
 from sonnen import Sonnen
-from ui import BatteryPile, HousePile, GridPile
-from ui import Colors
-from ui import UI_UPDATE_INTERVAL
+from app.ui import BatteryPile, HousePile, GridPile
+from app.ui import Colors
+from app.ui import UI_UPDATE_INTERVAL
 
 
 class App:

@@ -1,9 +1,9 @@
 import urwid
 
 # configuration
-from config import BATTERY_MAX_LOAD_W
-from config import INVERTER_MAX_LOAD
-from config import HOUSE_MAX_LOAD
+from app.config import BATTERY_MAX_LOAD_W
+from app.config import INVERTER_MAX_LOAD
+from app.config import HOUSE_MAX_LOAD
 
 UI_UPDATE_INTERVAL = 3
 

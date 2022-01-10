@@ -1,10 +1,9 @@
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
-
-# Authentication token for the battery
+# Auth token of the battery
 AUTH_TOKEN = os.getenv('AUTH_TOKEN')
+
+
 # IP address of the battery
 IP = 'sonnenbatterie'
 
