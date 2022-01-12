@@ -12,5 +12,5 @@ setup(
     version='0.1.0',
     packages=find_packages(exclude='tests'),
     license=program_license,
-    entry_points={"console_scripts": ["sonnen=app.__main__:main"]}
+    entry_points={"console_scripts": ["sonnen=sonnen_manager.__main__:main"]}
 )

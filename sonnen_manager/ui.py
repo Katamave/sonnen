@@ -1,9 +1,9 @@
 import urwid
 
 # configuration
-from app.config import BATTERY_MAX_LOAD_W
-from app.config import INVERTER_MAX_LOAD
-from app.config import HOUSE_MAX_LOAD
+from sonnen_manager.config import BATTERY_MAX_LOAD_W
+from sonnen_manager.config import INVERTER_MAX_LOAD
+from sonnen_manager.config import HOUSE_MAX_LOAD
 
 UI_UPDATE_INTERVAL = 3
 

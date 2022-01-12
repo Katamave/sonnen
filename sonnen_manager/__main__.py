@@ -1,7 +1,7 @@
-from app import App
+from sonnen_manager import App
 from sonnen import Sonnen
 
-from app.config import IP, AUTH_TOKEN
+from sonnen_manager.config import IP, AUTH_TOKEN
 
 
 def main():
