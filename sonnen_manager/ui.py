@@ -130,9 +130,9 @@ class BatteryPile(urwid.Pile):
         # Installed modules in the system
         self.txt_modules_installed = urwid.Text(self.modules_installed_str)
         # Time until battery discharged
-        self.txt_time_to_discharge = urwid.Text(self.time_to_discharge_str)
+        self.txt_time_to_discharge = urwid.Text(self.fully_discharged_at_str)
         # Time until fully charged
-        self.txt_time_to_fully_charged = urwid.Text(self.time_to_fully_charged)
+        self.txt_time_to_fully_charged = urwid.Text(self.fully_charged_at_str)
         # Battery SoC
         self.txt_progress_soc_u = urwid.Text('Battery SoC')
         self.pb_soc_u = BetterProgressBar(Colors.NORMAL, Colors.COMPLETE)
@@ -170,8 +170,8 @@ class BatteryPile(urwid.Pile):
         self.pb_battery_charge.current = self.sonnen.charging
         self.pb_soc_u.current = self.sonnen.u_soc
         self.pb_soc_u.update_complete_color([Colors.ECO, Colors.LOW, Colors.CRITICAL])
-        self.txt_time_to_discharge.set_text(self.time_to_discharge_str)
-        self.txt_time_to_fully_charged.set_text(self.time_to_fully_charged)
+        self.txt_time_to_discharge.set_text(self.fully_discharged_at_str)
+        self.txt_time_to_fully_charged.set_text(self.fully_charged_at_str)
         self.txt_remaining_capacity.set_text(self.battery_remaining_wh_str)
 
         self.app.loop.set_alarm_in(UI_UPDATE_INTERVAL, self.update_battery)
@@ -185,9 +185,11 @@ class BatteryPile(urwid.Pile):
         return f'Installed modules: {self.sonnen.installed_modules}'
 
     @property
-    def time_to_discharge_str(self):
-        return f'Time to discharged: {self.sonnen.time_to_empty}'
+    def fully_discharged_at_str(self):
+        return f'Fully discharged at: ' \
+               f'{self.sonnen.fully_discharged_at if self.sonnen.discharging else "Not discharging"}'
 
     @property
-    def time_to_fully_charged(self):
-        return f'Time to fully charged: {self.sonnen.time_remaining_to_fully_charged}'
+    def fully_charged_at_str(self):
+        return f'Fully charged at: ' \
+               f'{self.sonnen.fully_charged_at if self.sonnen.charging else "Not charging"}'

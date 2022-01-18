@@ -17,5 +17,4 @@ def main():
 
     print(sonnen_battery.latest_details_data)
     print(sonnen_battery.status_data)
-    print(sonnen_battery.time_since_full)
 

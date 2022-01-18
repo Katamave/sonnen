@@ -75,6 +75,14 @@ class Sonnen:
         return datetime.timedelta(seconds=seconds)
 
     @property
+    def fully_discharged_at(self) -> datetime:
+        """Future time of battery fully discharged
+            Returns:
+                Future time
+        """
+        return (datetime.datetime.now() + self.time_to_empty).strftime('%d.%B %H:%M')
+
+    @property
     def seconds_since_full(self) -> int:
         """Seconds passed since full charge
             Returns:
@@ -167,6 +175,10 @@ class Sonnen:
         remaining_charge = self.full_charge_capacity - self.remaining_capacity_wh
         seconds = int((remaining_charge / self.charging) * 3600) if self.charging else 0
         return datetime.timedelta(seconds=seconds)
+
+    @property
+    def fully_charged_at(self) -> datetime:
+        return (datetime.datetime.now() + self.time_remaining_to_fully_charged).strftime('%d.%B %H:%M')
 
     @property
     def pac_total(self) -> int:
